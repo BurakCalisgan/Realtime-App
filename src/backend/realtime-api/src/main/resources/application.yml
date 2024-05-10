@@ -5,6 +5,7 @@ spring:
       - common
       - db
       - jwt
-      - -logging
+      - logging
+      - smtp
   application:
     name: realtime-app

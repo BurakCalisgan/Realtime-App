@@ -13,6 +13,7 @@ import com.realtime.api.realtimeapp.security.UserDetailsImpl;
 import com.realtime.api.realtimeapp.service.business.AuthBusinessService;
 import com.realtime.api.realtimeapp.service.domain.RoleService;
 import com.realtime.api.realtimeapp.service.domain.UserService;
+import com.realtime.api.realtimeapp.service.external.MailService;
 import com.realtime.api.realtimeapp.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ public class AuthBusinessServiceImpl implements AuthBusinessService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final MailService mailService;
 
     @Override
     public MessageResponse registerUser(UserRegisterRequestDto userRegisterRequestDto) {
@@ -80,6 +82,7 @@ public class AuthBusinessServiceImpl implements AuthBusinessService {
 
         user.setRoles(roles);
         userService.createUser(user);
+        mailService.send(userRegisterRequestDto.getEmail(),"Registering", "Başarıyla kayıt oldunuz.");
         log.info("Registering transaction end. : {}", user.getEmail());
 
         return new MessageResponse("User registered successfully!");

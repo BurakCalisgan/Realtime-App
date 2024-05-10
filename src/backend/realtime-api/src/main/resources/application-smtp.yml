@@ -1,0 +1,15 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    protocol: smtps
+    username: b.calisgan.19@gmail.com
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
