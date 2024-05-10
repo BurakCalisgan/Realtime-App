@@ -15,6 +15,7 @@ import com.realtime.api.realtimeapp.service.domain.RoleService;
 import com.realtime.api.realtimeapp.service.domain.UserService;
 import com.realtime.api.realtimeapp.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthBusinessServiceImpl implements AuthBusinessService {
 
     private final UserMapper userMapper;
@@ -41,6 +43,7 @@ public class AuthBusinessServiceImpl implements AuthBusinessService {
 
     @Override
     public MessageResponse registerUser(UserRegisterRequestDto userRegisterRequestDto) {
+        log.info("Registering user: {}", userRegisterRequestDto);
         validateUser(userRegisterRequestDto);
 
         User user = userMapper.toEntity(userRegisterRequestDto);
@@ -77,6 +80,7 @@ public class AuthBusinessServiceImpl implements AuthBusinessService {
 
         user.setRoles(roles);
         userService.createUser(user);
+        log.info("Registering transaction end. : {}", user.getEmail());
 
         return new MessageResponse("User registered successfully!");
     }
@@ -94,6 +98,7 @@ public class AuthBusinessServiceImpl implements AuthBusinessService {
 
     @Override
     public LoginJwtResponse login(UserLoginRequestDto userLoginRequestDto) {
+        log.info("Login request: {}", userLoginRequestDto);
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
                         userLoginRequestDto.getEmail(),
@@ -108,6 +113,7 @@ public class AuthBusinessServiceImpl implements AuthBusinessService {
                 .toList();
 
         String jwt = jwtUtils.generateTokenWithClaims(userDetails);
+        log.info("Login request end: {}", jwt);
 
         return LoginJwtResponse.builder()
                 .id(userDetails.getId())
