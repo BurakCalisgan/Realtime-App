@@ -1,0 +1,75 @@
+*.iml
+*.ipr
+*.iws
+*.log
+
+.classpath
+.project
+.idea
+.vscode
+.settings
+.gradle
+classes
+dataSources
+.ideaDataSources
+
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+# Maven / Spring Boot
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Node.js
+node_modules/
+
+# Angular
+/dist/
+/node_modules/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
