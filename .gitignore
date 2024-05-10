@@ -21,6 +21,7 @@ dataSources
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+/data
 
 
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.

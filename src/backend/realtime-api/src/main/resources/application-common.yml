@@ -1,0 +1,27 @@
+server:
+  port: ${PORT:8383}
+
+logging:
+  level:
+    root: info
+
+clear:
+  all:
+    cache:
+      fixed:
+        rate:
+
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+
+default:
+  language: tr
+
+error:
+  description: error.description.

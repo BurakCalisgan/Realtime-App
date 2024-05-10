@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="create-users-table" author="BurakCalisgan">
+    <createTable tableName="users">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints nullable="false" unique="true" primaryKey="true"/>
+      </column>
+      <column name="username" type="varchar2(40)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="email" type="varchar2(100)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="password" type="varchar2(120)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-role-table" author="BurakCalisgan">
+    <createTable tableName="roles">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints nullable="false" unique="true" primaryKey="true"/>
+      </column>
+      <column name="name" type="varchar2(20)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="insert-role-table-init-data" author="BurakCalisgan">
+    <insert tableName="roles">
+      <column name="name" value="ROLE_USER"/>
+    </insert>
+    <insert tableName="roles">
+      <column name="name" value="ROLE_MODERATOR"/>
+    </insert>
+    <insert tableName="roles">
+      <column name="name" value="ROLE_ADMIN"/>
+    </insert>
+    <insert tableName="roles">
+      <column name="name" value="ROLE_GUEST"/>
+    </insert>
+  </changeSet>
+
+
+  <changeSet id="create-user-roles-table" author="BurakCalisgan">
+    <createTable tableName="user_roles">
+      <column name="user_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="role_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="fk_user_id"
+                             baseTableName="user_roles" baseColumnNames="user_id"
+                             referencedTableName="users" referencedColumnNames="id" />
+    <addForeignKeyConstraint constraintName="fk_role_id"
+                             baseTableName="user_roles" baseColumnNames="role_id"
+                             referencedTableName="roles" referencedColumnNames="id" />
+  </changeSet>
+
+
+  <changeSet id="create-refresh-token-table" author="BurakCalisgan">
+    <createTable tableName="refresh_tokens">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints nullable="false" unique="true" primaryKey="true"/>
+      </column>
+      <column name="token" type="text">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_id" type="bigint">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_user_id"
+                             baseTableName="refresh_tokens" baseColumnNames="user_id"
+                             referencedTableName="users" referencedColumnNames="id" />
+
+  </changeSet>
+
+</databaseChangeLog>
