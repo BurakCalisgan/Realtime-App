@@ -7,5 +7,6 @@ spring:
       - jwt
       - logging
       - smtp
+      - kafka
   application:
     name: realtime-app

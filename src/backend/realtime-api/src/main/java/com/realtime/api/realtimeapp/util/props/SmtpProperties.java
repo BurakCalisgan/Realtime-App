@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Properties;
+
 @Data
 @ConfigurationProperties(prefix = "spring.mail")
 public class SmtpProperties {
