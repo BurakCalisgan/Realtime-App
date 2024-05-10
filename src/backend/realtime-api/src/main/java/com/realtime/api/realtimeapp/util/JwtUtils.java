@@ -27,6 +27,10 @@ public class JwtUtils {
         Map<String, Claim> claimMap = this.getClaimsAndValidate(accessToken);
         return claimMap.get("sub").asString();
     }
+    public String getEmailFromJwtToken(String accessToken) {
+        Map<String, Claim> claimMap = this.getClaimsAndValidate(accessToken);
+        return claimMap.get("email").asString();
+    }
 
     private Map<String, Claim> getClaimsAndValidate(String accessToken) {
         try {
