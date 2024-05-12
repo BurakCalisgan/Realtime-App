@@ -13,7 +13,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ValidationError } from '../../interfaces/validation-error';
+import { ValidationError } from '../../interfaces/validation/validation-error';
 
 @Component({
   selector: 'app-register',

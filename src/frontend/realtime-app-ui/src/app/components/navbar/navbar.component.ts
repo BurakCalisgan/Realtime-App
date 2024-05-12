@@ -7,7 +7,6 @@ import { AuthService } from '../../services/auth.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -25,7 +24,6 @@ import { UserService } from '../../services/user.service';
 })
 export class NavbarComponent {
   authService = inject(AuthService);
-  userService = inject(UserService);
   matSnackBar = inject(MatSnackBar);
   router = inject(Router);
 

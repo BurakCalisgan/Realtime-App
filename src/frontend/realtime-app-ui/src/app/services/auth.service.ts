@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { LoginRequest } from '../interfaces/login-request';
+import { LoginRequest } from '../interfaces/request/login-request';
 import { Observable, map } from 'rxjs';
-import { AuthResponse } from '../interfaces/auth-response';
+import { AuthResponse } from '../interfaces/response/auth-response';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
-import { RegisterRequest } from '../interfaces/register-request';
-import { UserDetail } from '../interfaces/user-detail';
-import { ResetPasswordRequest } from '../interfaces/reset-password-request';
+import { RegisterRequest } from '../interfaces/request/register-request';
+import { UserDetail } from '../interfaces/response/user-detail';
 
 @Injectable({
   providedIn: 'root',
@@ -35,26 +34,21 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}auth/register`, data);
   }
 
-  getDetail = (): Observable<UserDetail> =>
-    this.http.get<UserDetail>(`${this.apiUrl}account/detail`);
-
   forgotPassword = (email: string): Observable<AuthResponse> =>
     this.http.post<AuthResponse>(`${this.apiUrl}account/forgot-password`, {
       email,
     });
+  
 
-  resetPassword = (data: ResetPasswordRequest): Observable<AuthResponse> =>
-    this.http.post<AuthResponse>(`${this.apiUrl}account/reset-password`, data);
-
-  getUserDetail = () => {
+  getUserDetailFromToken = () => {
     const token = this.getToken();
     if (!token) return null;
     const decodedToken: any = jwtDecode(token);
     const userDetail = {
-      id: decodedToken.nameid,
-      fullName: decodedToken.name,
+      id: decodedToken.userId,
+      username: decodedToken.sub,
       email: decodedToken.email,
-      roles: decodedToken.role || [],
+      roles: decodedToken.roles || [],
     };
 
     return userDetail;
