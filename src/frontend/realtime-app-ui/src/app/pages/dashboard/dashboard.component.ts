@@ -8,7 +8,7 @@ import {
 import { DialogModule, TooltipModule } from '@syncfusion/ej2-angular-popups';
 import { pieData } from './datasource';
 import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
-import { ColDef } from 'ag-grid-community'; // Column Definition Type Interface
+import { ColDef,GridApi, GridOptions,GridReadyEvent, ModuleRegistry } from 'ag-grid-community'; // Column Definition Type Interface
 
 
 @Component({
@@ -22,40 +22,30 @@ import { ColDef } from 'ag-grid-community'; // Column Definition Type Interface
 export class DashboardComponent implements OnInit, OnDestroy {
 
   webSocketService = inject(WebSocketService)
+
   public piedata?: Object[];
+  public legendSettings?: Object;
+  public startAngle?: number;
+  public endAngle?: number;
+  public datalabel?: Object;
   public isOn: Boolean = true;
 
-  public legendSettings?: Object;
+
+  private gridApi!: GridApi<any>;
+  public socketData?: any;
   pagination = true;
   paginationPageSize = 500;
   paginationPageSizeSelector = [10, 200, 500, 1000];
-  rowData = [
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-  ];
   // Column Definitions: Defines the columns to be displayed.
   colDefs: ColDef[] = [
-    { field: "make", filter: true, editable: true },
-    { field: "model", filter: true, editable: true },
-    { field: "price", filter: true, editable: true },
-    { field: "electric", filter: true, editable: true }
+    { field: "currency", filter: true, editable: true },
+    { field: "rate", filter: true, editable: true },
   ];
+  public rowData = [
+    { currency: "USD", rate: 15.5 },
+    { currency: "EUR", rate: 19.5 },
+  ];
+
 
   public pointClick(args: IPointEventArgs): void {
     this.isOn = !this.isOn
@@ -67,19 +57,47 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   };
 
+  onGridReady(params: GridReadyEvent<any>) {
+    this.gridApi = params.api;
+  }
+
   ngOnInit() {
     this.piedata = pieData;
+    this.startAngle = 0;
+    this.endAngle = 360;
+    this.datalabel = { visible: true, name: 'text', position: 'Outside' };
     this.legendSettings = {
-        visible: false
+      visible: true
     };
+
     this.webSocketService.listen("currencyData").subscribe((data) => {
+      const index = this.rowData.findIndex(x => x.currency === data.currency);
+
+      if (index !== -1) {
+        // Mevcut satırı güncelle
+        const updatedRow = { ...this.rowData[index], rate: parseFloat(data.rate) };
+        this.rowData[index] = updatedRow;
+
+         // AG Grid'e değişiklikleri bildir
+         this.gridApi.setGridOption("rowData",this.rowData);
+      } else {
+         // Yeni satır ekle
+         const newCurrencyValue = {
+          currency: data.currency,
+          rate: parseFloat(data.rate)
+        };
+        this.rowData.push(newCurrencyValue);
+
+        // AG Grid'e yeni satır ekle
+        this.gridApi.setGridOption("rowData",this.rowData);
+      }
+      this.socketData = JSON.stringify(data);
       console.log(data);
-    })
+    });
   }
 
   ngOnDestroy(): void {
     this.webSocketService.disconnect();
   }
-
 
 }
