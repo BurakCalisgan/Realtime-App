@@ -1,13 +1,13 @@
 const { Client } = require('pg');
 
 class Database {
-  constructor() {
+  constructor(connectionString) {
     this.client = new Client({
-      user: 'postgres',
-      host: 'localhost',
-      database: 'postgres',
-      password: 'postgres',
-      port: '5432'
+      user: connectionString.user,
+      host: connectionString.host,
+      database: connectionString.database,
+      password: connectionString.password,
+      port: connectionString.port
     });
   }
 

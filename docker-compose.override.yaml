@@ -1,20 +1,18 @@
-version: '3'
-
 services:
-  db:
-    image: "postgres"
+  realtimedb:
+    container_name: realtimedb
+    #restart: always
     ports:
       - "5432:5432"
+    #volumes:
+    #  - ./data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./data:/var/lib/postgresql/data
 
   zookeeper:
     container_name: zookeeper
-    image: confluentinc/cp-zookeeper
     ports:
       - "2181:2181"
     environment:
@@ -22,9 +20,6 @@ services:
   
   kafka:
     container_name: kafka
-    image: confluentinc/cp-kafka
-    depends_on:
-      - zookeeper
     ports:
       - 9092:9092
     environment:
@@ -36,14 +31,17 @@ services:
       KAFKA_LOG_CLEANER_DELETE_RETENTION_MS: 5000
       KAFKA_BROKER_ID: 1
       KAFKA_MIN_INSYNC_REPLICAS: 1
+    depends_on:
+      - zookeeper
+      
+  # redis:
+  #   container_name: redis
+  #   ports:
+  #     - "6379:6379"
+  #   environment:
+  #     - ALLOW_EMPTY_PASSWORD=yes
+  #     - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
 
-#  cache:
-#    image: "redis"
-#    ports:
-#      - "6379:6379"
-#    environment:
-#      - ALLOW_EMPTY_PASSWORD=yes
-#      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
   # app:
   #   build: .
   #   ports:
@@ -56,3 +54,13 @@ services:
   #   depends_on:
   #     - db
   #     - cache
+
+
+  realtime.socket:
+    container_name: realtime.socket
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+    depends_on:
+      - realtimedb
