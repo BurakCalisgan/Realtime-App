@@ -64,3 +64,12 @@ services:
       - 3000:3000
     depends_on:
       - realtimedb
+
+  realtime.ui:
+    container_name: realtime.ui
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4200:4200
+    depends_on:
+      - realtime.socket

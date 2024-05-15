@@ -32,3 +32,9 @@ services:
     build:
       context: src/backend/realtime-socket-test
       dockerfile: ./Dockerfile
+
+  realtime.ui:
+    image: realtime_app_ui
+    build:
+      context: src/frontend/realtime-app-ui
+      dockerfile: ./Dockerfile
