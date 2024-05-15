@@ -13,28 +13,20 @@ services:
   # cache:
   #   image: "redis"
 
-  # realtime.api:
-  #   build: .
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     SPRING_PROFILE_ACTIVE: dev
-  #     SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/postgres"
-  #     SPRING_REDIS_HOST: cache
-  #     SPRING_REDIS_PORT: 6379
-  #   depends_on:
-  #     - db
-  #     - cache
-
-
   realtime.socket:
     image: realtime_socket_image
     build:
-      context: src/backend/realtime-socket-test
+      context: src/backend/realtime-socket
       dockerfile: ./Dockerfile
 
   realtime.ui:
-    image: realtime_app_ui
+    image: realtime_ui
     build:
       context: src/frontend/realtime-app-ui
       dockerfile: ./Dockerfile
+
+  # realtime.api:
+  #   image: realtime_api_image
+  #   build:
+  #     context: src/backend/realtime-api
+  #     dockerfile: ./Dockerfile

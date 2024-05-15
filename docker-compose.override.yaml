@@ -3,7 +3,7 @@ services:
     container_name: realtimedb
     #restart: always
     ports:
-      - "5432:5432"
+      - 5432:5432
     #volumes:
     #  - ./data:/var/lib/postgresql/data
     environment:
@@ -14,7 +14,7 @@ services:
   zookeeper:
     container_name: zookeeper
     ports:
-      - "2181:2181"
+      - 2181:2181
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
   
@@ -42,34 +42,34 @@ services:
   #     - ALLOW_EMPTY_PASSWORD=yes
   #     - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
 
-  # app:
-  #   build: .
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     SPRING_PROFILE_ACTIVE: dev
-  #     SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/postgres"
-  #     SPRING_REDIS_HOST: cache
-  #     SPRING_REDIS_PORT: 6379
-  #   depends_on:
-  #     - db
-  #     - cache
-
-
   realtime.socket:
     container_name: realtime.socket
-    environment:
-      NODE_ENV: production
     ports:
       - 3000:3000
+    environment:
+      NODE_ENV: production
     depends_on:
       - realtimedb
 
   realtime.ui:
     container_name: realtime.ui
-    environment:
-      NODE_ENV: production
     ports:
       - 4200:4200
+    environment:
+      NODE_ENV: production
     depends_on:
       - realtime.socket
+
+  # realtime.api:
+  #   container_name: realtime.api
+  #   ports:
+  #     - 8383:8383
+  #   environment:
+  #     SPRING_DATASOURCE_URL: "jdbc:postgresql://realtimedb:5432/postgres"
+  #     SPRING_PROFILE_ACTIVE: dev
+  #     SPRING_REDIS_HOST: cache
+  #     SPRING_REDIS_PORT: 6379
+  #   links:
+  #     - realtimedb
+  #   depends_on:
+  #     - realtimedb
