@@ -1,6 +1,7 @@
 package com.realtime.api.realtimeapp.controller;
 
 import com.realtime.api.realtimeapp.model.dto.request.SymbolUpdateRequestDto;
+import com.realtime.api.realtimeapp.model.dto.response.MessageResponse;
 import com.realtime.api.realtimeapp.model.dto.response.SymbolResponse;
 import com.realtime.api.realtimeapp.service.business.SymbolBusinessService;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,8 @@ public class SymbolsController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public void updateSymbol(@PathVariable Long id, @RequestBody SymbolUpdateRequestDto requestDto){
-        symbolBusinessService.updateSymbol(id, requestDto);
+    public ResponseEntity<MessageResponse> updateSymbol(@PathVariable Long id, @RequestBody SymbolUpdateRequestDto requestDto){
+        return new ResponseEntity<>(symbolBusinessService.updateSymbol(id, requestDto), HttpStatus.OK);
     }
 
 

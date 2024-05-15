@@ -6,7 +6,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const Database = require('./infrastructure/database.js');
 const SocketServer = require('./infrastructure/socket.js');
-const CurrencyService = require('./services/currency.services.js');
+const SymbolService = require('./services/symbol.services.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -38,9 +38,9 @@ const database = new Database(connectionString);
 database.connect();
 
 
-// Currency servisini oluşturma ve başlatma
-const currencyService = new CurrencyService(socketServer, database);
-currencyService.startSendingData();
+// Symbol servisini oluşturma ve başlatma
+const symbolService = new SymbolService(socketServer, database);
+symbolService.startSendingData();
 
 const PORT = process.env.PORT || 3000;
 

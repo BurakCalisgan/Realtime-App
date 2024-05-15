@@ -25,6 +25,12 @@
           </div>
         </a>
         <mat-menu #menu="matMenu">
+          <button [routerLink]="['dashboard']" mat-menu-item>
+            <mat-icon>dashboard</mat-icon>
+            <span>
+              Dashboard
+            </span>
+          </button>
           <button [routerLink]="['profile',userDetail.id]" mat-menu-item>
             <mat-icon>account_circle</mat-icon>
             <span>

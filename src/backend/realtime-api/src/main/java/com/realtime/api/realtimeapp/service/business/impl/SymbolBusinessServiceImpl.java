@@ -3,6 +3,7 @@ package com.realtime.api.realtimeapp.service.business.impl;
 import com.realtime.api.realtimeapp.entity.Symbol;
 import com.realtime.api.realtimeapp.mapper.SymbolMapper;
 import com.realtime.api.realtimeapp.model.dto.request.SymbolUpdateRequestDto;
+import com.realtime.api.realtimeapp.model.dto.response.MessageResponse;
 import com.realtime.api.realtimeapp.model.dto.response.SymbolResponse;
 import com.realtime.api.realtimeapp.service.business.SymbolBusinessService;
 import com.realtime.api.realtimeapp.service.domain.SymbolService;
@@ -30,13 +31,14 @@ public class SymbolBusinessServiceImpl implements SymbolBusinessService {
     }
 
     @Override
-    public void updateSymbol(long id, SymbolUpdateRequestDto requestDto) {
+    public MessageResponse updateSymbol(long id, SymbolUpdateRequestDto requestDto) {
         log.info("Updating symbol with id {}", id);
 
         Symbol symbol = symbolMapper.toEntity(requestDto);
-        symbol.setId(id);
-        symbolService.updateSymbol(symbol);
 
+        symbolService.updateSymbol(symbol);
         log.info("Updating symbol end with id {}", id);
+        return new MessageResponse("Updated symbol with id " + id);
+
     }
 }

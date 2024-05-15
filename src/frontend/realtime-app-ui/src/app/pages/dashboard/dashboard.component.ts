@@ -8,7 +8,12 @@ import {
 import { DialogModule, TooltipModule } from '@syncfusion/ej2-angular-popups';
 import { pieData } from './datasource';
 import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
-import { ColDef,GridApi, GridOptions,GridReadyEvent, ModuleRegistry } from 'ag-grid-community'; // Column Definition Type Interface
+import { ColDef, GridApi, GridOptions, GridReadyEvent, ModuleRegistry } from 'ag-grid-community'; // Column Definition Type Interface
+import { SymbolService } from '../../services/symbol.service';
+import { SymbolResponse } from '../../interfaces/response/symbol-reponse';
+import { SymbolUpdateRequest } from '../../interfaces/request/symbol-update-request';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -20,8 +25,10 @@ import { ColDef,GridApi, GridOptions,GridReadyEvent, ModuleRegistry } from 'ag-g
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  snackBar = inject(MatSnackBar);
 
   webSocketService = inject(WebSocketService)
+  symbolService = inject(SymbolService)
 
   public piedata?: Object[];
   public legendSettings?: Object;
@@ -38,14 +45,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   paginationPageSizeSelector = [10, 200, 500, 1000];
   // Column Definitions: Defines the columns to be displayed.
   colDefs: ColDef[] = [
-    { field: "currency", filter: true, editable: true },
-    { field: "rate", filter: true, editable: true },
-  ];
-  public rowData = [
-    { currency: "USD", rate: 15.5 },
-    { currency: "EUR", rate: 19.5 },
+    { headerName: "Id", field: "id", hide: true },
+    { headerName: "Sembol", field: "symbol", filter: true, editable: false },
+    { headerName: "Alış", field: "buyPrice", filter: true, editable: true },
+    { headerName: "Satış", field: "sellPrice", filter: true, editable: true },
   ];
 
+  public rowData!: SymbolResponse[];
 
   public pointClick(args: IPointEventArgs): void {
     this.isOn = !this.isOn
@@ -53,12 +59,71 @@ export class DashboardComponent implements OnInit, OnDestroy {
   };
 
   public edit(event: any): void {
-    console.log(event)
+
+    console.log(event);
+
+    const symbolUpdateRequest: SymbolUpdateRequest = {
+      id: event.data.id,
+      symbol: event.data.symbol,
+      buyPrice: event.data.buyPrice,
+      sellPrice: event.data.sellPrice
+    };
+
+    this.symbolService.updateSymbol(symbolUpdateRequest).subscribe({
+      next: (response: { message: string }) => {
+        this.snackBar.open('Updated Successfully.', 'Close', {
+          duration: 3000,
+        });
+      },
+      error: (error: HttpErrorResponse) => {
+        this.snackBar.open(error.message, 'Close', {
+          duration: 3000,
+        });
+      },
+    });
 
   };
 
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
+  }
+
+  fetcWebSocketData(){
+    this.webSocketService.listen("symbolData").subscribe((data) => {
+      const index = this.rowData.findIndex(x => x.symbol === data.symbol);
+
+      if (index !== -1) {
+        // Mevcut satırı güncelle
+        const updatedRow = { ...this.rowData[index], buyPrice: parseFloat(data.buyPrice), sellPrice: parseFloat(data.sellPrice) };
+        this.rowData[index] = updatedRow;
+        this.symbolService.updateSymbol(updatedRow).subscribe({
+          next: (response: { message: string }) => {
+          },
+          error: (error: HttpErrorResponse) => {
+            console.log(error);
+          },
+        });
+
+        // AG Grid'e değişiklikleri bildir
+        this.gridApi.setGridOption("rowData", this.rowData);
+      } 
+      // else {
+      //   // Yeni satır ekle
+      //   const newCurrencyValue = {
+      //     id: data.id,
+      //     symbol: data.symbol,
+      //     buyPrice: parseFloat(data.buyPrice),
+      //     sellPrice: parseFloat(data.sellPrice)
+      //   };
+      //   this.rowData.push(newCurrencyValue);
+
+      //   // AG Grid'e yeni satır ekle
+      //   this.gridApi.setGridOption("rowData", this.rowData);
+      // }
+      this.socketData = JSON.stringify(data);
+      console.log(data);
+    });
+
   }
 
   ngOnInit() {
@@ -70,30 +135,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       visible: true
     };
 
-    this.webSocketService.listen("currencyData").subscribe((data) => {
-      const index = this.rowData.findIndex(x => x.currency === data.currency);
-
-      if (index !== -1) {
-        // Mevcut satırı güncelle
-        const updatedRow = { ...this.rowData[index], rate: parseFloat(data.rate) };
-        this.rowData[index] = updatedRow;
-
-         // AG Grid'e değişiklikleri bildir
-         this.gridApi.setGridOption("rowData",this.rowData);
-      } else {
-         // Yeni satır ekle
-         const newCurrencyValue = {
-          currency: data.currency,
-          rate: parseFloat(data.rate)
-        };
-        this.rowData.push(newCurrencyValue);
-
-        // AG Grid'e yeni satır ekle
-        this.gridApi.setGridOption("rowData",this.rowData);
-      }
-      this.socketData = JSON.stringify(data);
-      console.log(data);
+    this.symbolService.getSymbols().subscribe(response => {
+      this.rowData = response;
     });
+
+    this.fetcWebSocketData()
+
   }
 
   ngOnDestroy(): void {

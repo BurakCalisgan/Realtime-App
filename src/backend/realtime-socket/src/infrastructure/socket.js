@@ -10,7 +10,7 @@ class SocketServer {
   }
 
   emitData(data) {
-    this.io.emit('currencyData', data);
+    this.io.emit('symbolData', data);
   }
 }
 

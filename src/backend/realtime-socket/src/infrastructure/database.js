@@ -20,13 +20,13 @@ class Database {
     }
   }
 
-  async insertCurrencyData(currency, rate) {
-    const query = 'INSERT INTO currency_data(currency, rate) VALUES($1, $2)';
-    const values = [currency, rate];
+  async insertSymbolData(symbol, buyPrice, sellPrice) {
+    const query = 'INSERT INTO symbols(symbol, buy_price, sell_price) VALUES($1, $2, $2)';
+    const values = [symbol, buyPrice, sellPrice];
     
     try {
       const result = await this.client.query(query, values);
-      console.log('Inserted currency data into PostgreSQL:', result.rows[0]);
+      console.log('Inserted symbol data into PostgreSQL:', result.rows[0]);
     } catch (error) {
       console.error('Error inserting data into PostgreSQL:', error);
     }
