@@ -20,7 +20,7 @@ public class CurrencyInfoServiceImpl implements CurrencyInfoService {
     }
 
     @Override
-    public CurrencyInfo getCurrencyInfoById(long id) {
-        return repository.findById(id);
+    public CurrencyInfo getCurrencyInfoByCurrency(String currency) {
+        return repository.findByCurrency(currency);
     }
 }

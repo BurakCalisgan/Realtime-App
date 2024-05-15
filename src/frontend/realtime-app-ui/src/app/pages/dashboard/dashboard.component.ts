@@ -6,7 +6,6 @@ import {
   AccumulationDataLabelService, IPointEventArgs
 } from '@syncfusion/ej2-angular-charts';
 import { DialogModule, TooltipModule } from '@syncfusion/ej2-angular-popups';
-import { pieData } from './datasource';
 import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
 import { ColDef, GridApi, GridOptions, GridReadyEvent, ModuleRegistry } from 'ag-grid-community'; // Column Definition Type Interface
 import { SymbolService } from '../../services/symbol.service';
@@ -14,6 +13,8 @@ import { SymbolResponse } from '../../interfaces/response/symbol-reponse';
 import { SymbolUpdateRequest } from '../../interfaces/request/symbol-update-request';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CurrencyInfoService } from '../../services/currency-info.service';
+import { CurrencyInfoResponse } from '../../interfaces/response/currency-info-reponse';
 
 
 @Component({
@@ -29,13 +30,54 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   webSocketService = inject(WebSocketService)
   symbolService = inject(SymbolService)
+  currencyInfoService = inject(CurrencyInfoService)
+
 
   public piedata?: Object[];
+  public currencyDetail!: CurrencyInfoResponse;
   public legendSettings?: Object;
   public startAngle?: number;
   public endAngle?: number;
   public datalabel?: Object;
   public isOn: Boolean = true;
+
+  fethPieData() {
+    this.currencyInfoService.getCurrencies().subscribe(response => {
+      this.piedata = response.map(item => {
+        return {
+          x: item.currency,
+          y: item.dailyTransaction,
+          fill: '#498fff',
+          text: item.description
+        };
+      });
+    });
+  }
+
+  fetchCurrencyDetailForDialog(currency: string) {
+    this.currencyInfoService.getCurrencyDetail(currency).subscribe(response => {
+      this.currencyDetail = response;
+    });
+  }
+
+  pieInit() {
+    this.fethPieData();
+    //this.piedata = dataMapping;
+    this.startAngle = 0;
+    this.endAngle = 360;
+    this.datalabel = { visible: true, name: 'text', position: 'Outside' };
+    this.legendSettings = {
+      visible: true
+    };
+  }
+
+
+  public pointClick(args: IPointEventArgs): void {
+    this.isOn = !this.isOn
+    const dataSource: any = args.series.dataSource;
+    this.fetchCurrencyDetailForDialog(dataSource[args.pointIndex].x);
+
+  };
 
 
   private gridApi!: GridApi<any>;
@@ -52,11 +94,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ];
 
   public rowData!: SymbolResponse[];
-
-  public pointClick(args: IPointEventArgs): void {
-    this.isOn = !this.isOn
-    console.log(args)
-  };
 
   public edit(event: any): void {
 
@@ -88,7 +125,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.gridApi = params.api;
   }
 
-  fetcWebSocketData(){
+
+  fetchGridData() {
+    this.symbolService.getSymbols().subscribe(response => {
+      this.rowData = response;
+    });
+  }
+
+  fetcWebSocketData() {
     this.webSocketService.listen("symbolData").subscribe((data) => {
       const index = this.rowData.findIndex(x => x.symbol === data.symbol);
 
@@ -106,7 +150,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         // AG Grid'e değişiklikleri bildir
         this.gridApi.setGridOption("rowData", this.rowData);
-      } 
+      }
       // else {
       //   // Yeni satır ekle
       //   const newCurrencyValue = {
@@ -127,19 +171,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.piedata = pieData;
-    this.startAngle = 0;
-    this.endAngle = 360;
-    this.datalabel = { visible: true, name: 'text', position: 'Outside' };
-    this.legendSettings = {
-      visible: true
-    };
+    this.pieInit();
 
-    this.symbolService.getSymbols().subscribe(response => {
-      this.rowData = response;
-    });
-
-    this.fetcWebSocketData()
+    this.fetchGridData();
+    this.fetcWebSocketData();
 
   }
 

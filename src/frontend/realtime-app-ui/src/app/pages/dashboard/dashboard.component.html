@@ -1,26 +1,36 @@
 <div style="margin: 50px;">
     <div>
-        <ag-grid-angular [rowData]="rowData" [columnDefs]="colDefs" class="ag-theme-quartz"
-            style="height: 550px;" [pagination]="pagination"
-            [paginationPageSize]="paginationPageSize" [paginationPageSizeSelector]="paginationPageSizeSelector"
-            (cellValueChanged)="edit($event)"
+        <ag-grid-angular [rowData]="rowData" [columnDefs]="colDefs" class="ag-theme-quartz" style="height: 550px;"
+            [pagination]="pagination" [paginationPageSize]="paginationPageSize"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" (cellValueChanged)="edit($event)"
             (gridReady)="onGridReady($event)">
         </ag-grid-angular>
     </div>
 
 
-    <div *ngIf="!isOn">
-        <ejs-dialog id='dialog' #ejDialog content='This is a Dialog with content' width='250px' />
 
-    </div>
 
-    <ejs-accumulationchart id="chart-container" 
-    [legendSettings]='legendSettings'
-    (pointClick)='pointClick($event)'>
+    <ejs-accumulationchart id="chart-container" [legendSettings]='legendSettings' (pointClick)='pointClick($event)'>
         <e-accumulation-series-collection>
-            <e-accumulation-series [dataSource]='piedata' xName='x' yName='y' type='Pie'
-            [startAngle]='startAngle' [endAngle]='endAngle' [dataLabel]='datalabel'>
-        </e-accumulation-series>
+            <e-accumulation-series [dataSource]='piedata' xName='x' yName='y' type='Pie' [startAngle]='startAngle'
+                [endAngle]='endAngle' [dataLabel]='datalabel'>
+            </e-accumulation-series>
         </e-accumulation-series-collection>
     </ejs-accumulationchart>
+
+    <div *ngIf="!isOn">
+        <ejs-dialog id='dialog' #ejDialog content='This is a Dialog with content' width='500px' width='500px' showCloseIcon='true'>
+            
+                <div style="padding: 15px;">
+                    <h4>Details</h4>
+                    <p>Currency: {{currencyDetail.currency}}</p>
+                    <p>Günlük İşlem Sayısı: {{currencyDetail.dailyTransaction}}</p>
+                    <p>Günlük İşlem Hacmi: {{currencyDetail.dailyTradingVolume}}</p>
+                    <p>Saatlik İşlem Hacmi: {{currencyDetail.hourlyTradingVolume}}</p>
+                    <p>Açıklama: {{currencyDetail.description}}</p>
+                </div>
+                
+        </ejs-dialog>
+
+    </div>
 </div>

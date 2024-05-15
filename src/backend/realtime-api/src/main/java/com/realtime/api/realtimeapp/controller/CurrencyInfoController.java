@@ -28,10 +28,10 @@ public class CurrencyInfoController {
         return new ResponseEntity<>(currencyInfoBusinessService.getCurrencies(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{currency}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<CurrencyInfoResponse> getCurrencyInfoById(@PathVariable Long id) {
-        return new ResponseEntity<>(currencyInfoBusinessService.getCurrencyInfoById(id), HttpStatus.OK);
+    public ResponseEntity<CurrencyInfoResponse> getCurrencyInfoById(@PathVariable String currency) {
+        return new ResponseEntity<>(currencyInfoBusinessService.getCurrencyInfoByCurrency(currency), HttpStatus.OK);
     }
 
 

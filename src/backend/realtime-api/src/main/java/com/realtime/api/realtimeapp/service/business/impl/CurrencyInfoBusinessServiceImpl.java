@@ -25,8 +25,8 @@ public class CurrencyInfoBusinessServiceImpl implements CurrencyInfoBusinessServ
     }
 
     @Override
-    public CurrencyInfoResponse getCurrencyInfoById(long id) {
-        return currencyInfoMapper.toDto(currencyInfoService.getCurrencyInfoById(id));
+    public CurrencyInfoResponse getCurrencyInfoByCurrency(String currency) {
+        return currencyInfoMapper.toDto(currencyInfoService.getCurrencyInfoByCurrency(currency));
     }
 
 }

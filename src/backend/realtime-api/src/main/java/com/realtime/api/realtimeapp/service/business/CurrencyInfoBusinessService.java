@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CurrencyInfoBusinessService {
     List<CurrencyInfoResponse> getCurrencies();
-    CurrencyInfoResponse getCurrencyInfoById(long id);
+    CurrencyInfoResponse getCurrencyInfoByCurrency(String currency);
 }
