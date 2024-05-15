@@ -4,6 +4,7 @@ import com.realtime.api.realtimeapp.entity.Role;
 import com.realtime.api.realtimeapp.entity.User;
 import com.realtime.api.realtimeapp.exception.UserAlreadyExistsException;
 import com.realtime.api.realtimeapp.mapper.UserMapper;
+import com.realtime.api.realtimeapp.model.dto.request.SendMailRequestDto;
 import com.realtime.api.realtimeapp.model.dto.request.UserLoginRequestDto;
 import com.realtime.api.realtimeapp.model.dto.request.UserRegisterRequestDto;
 import com.realtime.api.realtimeapp.model.dto.response.LoginJwtResponse;
@@ -19,6 +20,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +29,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -52,6 +56,9 @@ public class AuthBusinessServiceImplTests {
     @Mock
     private JwtUtils jwtUtils;
 
+    @Mock
+    private KafkaTemplate<String, SendMailRequestDto> kafkaTemplate;
+
     @InjectMocks
     private AuthBusinessServiceImpl authBusinessService;
 
@@ -74,12 +81,17 @@ public class AuthBusinessServiceImplTests {
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
 
+
+        SendResult<String, SendMailRequestDto> sendResult = mock(SendResult.class);
+        CompletableFuture<SendResult<String, SendMailRequestDto>> future = CompletableFuture.completedFuture(sendResult);
+
         when(roleService.findByName(any())).thenReturn(Optional.of(userRole));
         when(userService.existsByEmail(any())).thenReturn(false);
         when(userService.existsByUsername(any())).thenReturn(false);
         doNothing().when(userService).createUser(any());
         when(userMapper.toEntity(requestDto)).thenReturn(user);
         when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
+        when(kafkaTemplate.send(any(),any())).thenReturn(future);
 
         // Act
         var response = authBusinessService.registerUser(requestDto);

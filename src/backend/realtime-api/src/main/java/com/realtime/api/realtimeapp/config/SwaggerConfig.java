@@ -14,7 +14,10 @@ public class SwaggerConfig {
     public GroupedOpenApi parameterApiGroup() {
         return GroupedOpenApi.builder()
                 .group(PARAMETER_DOCKET_TITLE)
-                .pathsToMatch("/api/auth/**","/api/user/**")
+                .pathsToMatch("/api/auth/**",
+                        "/api/user/**",
+                        "/api/symbol/**",
+                        "/api/currency-info/**")
                 .packagesToScan(CONTROLLER_BASE_PACKAGE)
                 .build();
     }

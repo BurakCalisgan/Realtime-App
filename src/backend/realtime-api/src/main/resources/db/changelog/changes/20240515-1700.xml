@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="create-symbols-table" author="BurakCalisgan">
+    <createTable tableName="symbols">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints nullable="false" unique="true" primaryKey="true"/>
+      </column>
+      <column name="symbol" type="varchar2(30)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="buy_price" type="DECIMAL(19, 2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="sell_price" type="DECIMAL(19, 2)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="insert-symbols-table-init-data" author="BurakCalisgan">
+    <insert tableName="symbols">
+      <column name="symbol" value="USD/TRY"/>
+      <column name="buy_price" value="10.5"/>
+      <column name="sell_price" value="12.5"/>
+    </insert>
+    <insert tableName="symbols">
+      <column name="symbol" value="EUR/TRY"/>
+      <column name="buy_price" value="20.5"/>
+      <column name="sell_price" value="22.5"/>
+    </insert>
+    <insert tableName="symbols">
+      <column name="symbol" value="AUD/TRY"/>
+      <column name="buy_price" value="5.5"/>
+      <column name="sell_price" value="7.5"/>
+    </insert>
+    <insert tableName="symbols">
+      <column name="symbol" value="AUD/USD"/>
+      <column name="buy_price" value="0.5"/>
+      <column name="sell_price" value="1.5"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

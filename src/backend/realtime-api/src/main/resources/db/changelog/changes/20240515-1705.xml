@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="create-currency-info-table" author="BurakCalisgan">
+    <createTable tableName="currency_info">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints nullable="false" unique="true" primaryKey="true"/>
+      </column>
+      <column name="currency" type="varchar2(30)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="daily_transaction" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="daily_trading_volume" type="DECIMAL(19, 2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="hourly_trading_volume" type="DECIMAL(19, 2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="varchar2(300)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="insert-currency-info-table-init-data" author="BurakCalisgan">
+    <insert tableName="currency_info">
+      <column name="currency" value="USD"/>
+      <column name="daily_transaction" value="1000"/>
+      <column name="daily_trading_volume" value="50000.52"/>
+      <column name="hourly_trading_volume" value="5000.52"/>
+      <column name="description" value="Test description"/>
+    </insert>
+    <insert tableName="currency_info">
+      <column name="currency" value="EURO"/>
+      <column name="daily_transaction" value="10000"/>
+      <column name="daily_trading_volume" value="100000.52"/>
+      <column name="hourly_trading_volume" value="10000.52"/>
+      <column name="description" value="Test description"/>
+    </insert>
+    <insert tableName="currency_info">
+      <column name="currency" value="JPY"/>
+      <column name="daily_transaction" value="100000"/>
+      <column name="daily_trading_volume" value="1255.52"/>
+      <column name="hourly_trading_volume" value="125.52"/>
+      <column name="description" value="Test description"/>
+    </insert>
+    <insert tableName="currency_info">
+      <column name="currency" value="AUD"/>
+      <column name="daily_transaction" value="100"/>
+      <column name="daily_trading_volume" value="325555.52"/>
+      <column name="hourly_trading_volume" value="3125.52"/>
+      <column name="description" value="Test description"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
