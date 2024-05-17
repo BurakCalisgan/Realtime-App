@@ -79,6 +79,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   };
 
+  onClose(args: any): void {
+    this.isOn = !this.isOn
+  }
+
 
   private gridApi!: GridApi<any>;
   public socketData?: any;

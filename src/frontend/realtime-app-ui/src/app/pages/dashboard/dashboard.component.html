@@ -19,17 +19,18 @@
     </ejs-accumulationchart>
 
     <div *ngIf="!isOn">
-        <ejs-dialog id='dialog' #ejDialog content='Detay Bilgi' width='500px' width='500px' showCloseIcon='true'>
-            
-                <div style="padding: 15px;">
-                    <h4>Döviz Detayları</h4>
-                    <p>Döviz Kodu: {{currencyDetail.currency}}</p>
-                    <p>Günlük İşlem Sayısı: {{currencyDetail.dailyTransaction}}</p>
-                    <p>Günlük İşlem Hacmi: {{currencyDetail.dailyTradingVolume}}</p>
-                    <p>Saatlik İşlem Hacmi: {{currencyDetail.hourlyTradingVolume}}</p>
-                    <p>Açıklama: {{currencyDetail.description}}</p>
-                </div>
-                
+        <ejs-dialog id='dialog' #ejDialog content='Detay Bilgi' width='500px' width='500px' showCloseIcon='true'
+            (close)="onClose($event)">
+
+            <div style="padding: 15px;">
+                <h4>Döviz Detayları</h4>
+                <p>Döviz Kodu: {{currencyDetail.currency}}</p>
+                <p>Günlük İşlem Sayısı: {{currencyDetail.dailyTransaction}}</p>
+                <p>Günlük İşlem Hacmi: {{currencyDetail.dailyTradingVolume}}</p>
+                <p>Saatlik İşlem Hacmi: {{currencyDetail.hourlyTradingVolume}}</p>
+                <p>Açıklama: {{currencyDetail.description}}</p>
+            </div>
+
         </ejs-dialog>
 
     </div>
