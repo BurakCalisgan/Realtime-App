@@ -23,8 +23,8 @@ services:
       context: src/frontend/realtime-app-ui
       dockerfile: ./Dockerfile
 
-  # realtime.api:
-  #   image: realtime_api_image
-  #   build:
-  #     context: src/backend/realtime-api
-  #     dockerfile: ./Dockerfile
+  realtime.api:
+    image: realtime_api_image
+    build:
+      context: src/backend/realtime-api
+      dockerfile: ./Dockerfile

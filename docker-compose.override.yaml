@@ -4,8 +4,8 @@ services:
     #restart: always
     ports:
       - 5432:5432
-    #volumes:
-    #  - ./data:/var/lib/postgresql/data
+    volumes:
+     - ./data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -47,7 +47,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      NODE_ENV: production
+      PROFILE: production
     depends_on:
       - realtimedb
 
@@ -59,17 +59,13 @@ services:
       NODE_ENV: production
     depends_on:
       - realtime.socket
+      - realtimedb
 
-  # realtime.api:
-  #   container_name: realtime.api
-  #   ports:
-  #     - 8383:8383
-  #   environment:
-  #     SPRING_DATASOURCE_URL: "jdbc:postgresql://realtimedb:5432/postgres"
-  #     SPRING_PROFILE_ACTIVE: dev
-  #     SPRING_REDIS_HOST: cache
-  #     SPRING_REDIS_PORT: 6379
-  #   links:
-  #     - realtimedb
-  #   depends_on:
-  #     - realtimedb
+  realtime.api:
+    container_name: realtime.api
+    ports:
+      - 8383:8383
+    environment:
+      PROFILE: prod
+    depends_on:
+      - realtimedb

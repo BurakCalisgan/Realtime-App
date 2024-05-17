@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:8383}
+  port: ${ENV_PORT:8383}
 
 logging:
   level:

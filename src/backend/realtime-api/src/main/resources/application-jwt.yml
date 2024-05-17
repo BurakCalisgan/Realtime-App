@@ -1,5 +1,5 @@
 realtime-app:
   jwt:
-    secret: ${JWT_SECRET:realtime-app-secret}
-    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
-    refresh-expiration-ms: ${REFRESH_EXPIRATION_MS:86400000}
+    secret: ${ENV_JWT_SECRET:realtime-app-secret}
+    expiration-ms: ${ENV_JWT_EXPIRATION_MS:86400000}
+    refresh-expiration-ms: ${ENV_REFRESH_EXPIRATION_MS:86400000}

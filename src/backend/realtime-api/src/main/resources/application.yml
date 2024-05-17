@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${ACTIVE_PROFILE:dev}
+    active: ${ENV_ACTIVE_PROFILE:dev}
     include:
       - common
       - db
