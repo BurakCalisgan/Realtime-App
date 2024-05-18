@@ -6,7 +6,7 @@ COPY pom.xml /app
 RUN mvn -f /app/pom.xml clean package -Dmaven.test.skip
 
 # Java çalışma zamanı aşaması
-FROM openjdk:17-alpine
+FROM openjdk:17
 COPY --from=maven-builder /app/target/realtime-app-0.0.1-SNAPSHOT.jar /app/realtime-app-0.0.1-SNAPSHOT.jar
 # resources dosyalarını container'a ekleyin
 COPY src/main/resources /app/resources

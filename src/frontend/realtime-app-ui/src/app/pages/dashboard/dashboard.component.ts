@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WebSocketService } from '../../services/web-socket.service';
 import {
@@ -26,6 +26,7 @@ import { CurrencyInfoResponse } from '../../interfaces/response/currency-info-re
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  constructor(private elRef: ElementRef) { }
   snackBar = inject(MatSnackBar);
 
   webSocketService = inject(WebSocketService)
@@ -174,7 +175,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
 
+  //Syncfusion Lisans banner'ı ekrana geliyordu onun için bu kod eklendi.
+  removeLicenseBanner() {
+    // Tüm div elementlerini al
+    var allDivs = document.querySelectorAll('div');
+
+    // Her bir div'i kontrol et
+    allDivs.forEach(function (div) {
+      // Div'in içeriğini al
+      var divContent = div.textContent || div.innerText;
+
+      // İçerikte arama yap
+      if (divContent.includes("This application was built using a trial version of Syncfusion Essential Studio.")) {
+        // Aranan metni içeren div'i bulduk
+        div.remove();
+        // İşlemlerinizi burada gerçekleştirebilirsiniz
+      }
+    });
+  }
+
   ngOnInit() {
+    this.removeLicenseBanner();
+
     this.pieInit();
 
     this.fetchGridData();
