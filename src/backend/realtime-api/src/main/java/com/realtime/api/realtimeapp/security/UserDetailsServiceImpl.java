@@ -1,7 +1,7 @@
 package com.realtime.api.realtimeapp.security;
 
-import com.realtime.api.realtimeapp.entity.User;
-import com.realtime.api.realtimeapp.service.domain.UserService;
+import com.realtime.api.realtimeapp.model.dto.response.UserDetailResponse;
+import com.realtime.api.realtimeapp.service.business.UserBusinessService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,13 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserBusinessService userBusinessService;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+        UserDetailResponse user = userBusinessService.getUserDetailsByEmail(username);
 
         return UserDetailsImpl.build(user);
     }

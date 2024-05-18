@@ -11,4 +11,6 @@ public interface AuthBusinessService {
     void validateUser(UserRegisterRequestDto userRegisterRequestDto);
 
     LoginJwtResponse login(UserLoginRequestDto userLoginRequestDto);
+
+    MessageResponse logout(String username, long userId);
 }

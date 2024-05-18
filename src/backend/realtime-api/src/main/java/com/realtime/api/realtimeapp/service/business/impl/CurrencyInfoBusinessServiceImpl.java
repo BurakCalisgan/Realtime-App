@@ -6,6 +6,7 @@ import com.realtime.api.realtimeapp.service.business.CurrencyInfoBusinessService
 import com.realtime.api.realtimeapp.service.domain.CurrencyInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class CurrencyInfoBusinessServiceImpl implements CurrencyInfoBusinessServ
     }
 
     @Override
+    @Cacheable(cacheNames = "currencyinfo", key = "#currency")
     public CurrencyInfoResponse getCurrencyInfoByCurrency(String currency) {
         return currencyInfoMapper.toDto(currencyInfoService.getCurrencyInfoByCurrency(currency));
     }

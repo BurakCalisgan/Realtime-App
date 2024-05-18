@@ -34,13 +34,13 @@ services:
     depends_on:
       - zookeeper
       
-  # redis:
-  #   container_name: redis
-  #   ports:
-  #     - "6379:6379"
-  #   environment:
-  #     - ALLOW_EMPTY_PASSWORD=yes
-  #     - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+  redis:
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
 
   realtime.socket:
     container_name: realtime.socket

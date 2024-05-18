@@ -35,7 +35,7 @@ export class AuthService {
   }
 
   forgotPassword = (email: string): Observable<AuthResponse> =>
-    this.http.post<AuthResponse>(`${this.apiUrl}account/forgot-password`, {
+    this.http.post<AuthResponse>(`${this.apiUrl}auth/forgot-password`, {
       email,
     });
   
@@ -78,7 +78,18 @@ export class AuthService {
   };
 
   logout = (): void => {
+    const decodedToken = this.getUserDetailFromToken();
     localStorage.removeItem(this.tokenKey);
+    this.http.delete(`${this.apiUrl}auth/logout/${decodedToken?.email}/${decodedToken?.id}`)
+    .subscribe({
+      next: (response) => {
+        console.log('Logout successful', response);
+      },
+      error: (err) => {
+        console.error('Logout error', err);
+      }
+    });
+    
   };
 
   getAll = (): Observable<UserDetail[]> =>

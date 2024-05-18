@@ -8,5 +8,6 @@ spring:
       - logging
       - smtp
       - kafka
+      - redis
   application:
     name: realtime-app

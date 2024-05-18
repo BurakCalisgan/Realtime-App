@@ -1,7 +1,7 @@
 package com.realtime.api.realtimeapp.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.realtime.api.realtimeapp.entity.User;
+import com.realtime.api.realtimeapp.model.dto.response.UserDetailResponse;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,9 +36,9 @@ public class UserDetailsImpl implements UserDetails {
     this.authorities = authorities;
   }
 
-  public static UserDetailsImpl build(User user) {
+  public static UserDetailsImpl build(UserDetailResponse user) {
     List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+        .map(SimpleGrantedAuthority::new)
         .collect(Collectors.toList());
 
     return new UserDetailsImpl(

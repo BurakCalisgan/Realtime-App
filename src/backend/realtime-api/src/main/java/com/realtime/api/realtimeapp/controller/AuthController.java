@@ -30,5 +30,8 @@ public class AuthController {
         return new ResponseEntity<>(authBusinessService.login(userLoginRequestDto), HttpStatus.OK);
     }
 
-
+    @DeleteMapping("logout/{username}/{userId}")
+    private ResponseEntity<MessageResponse> logout(@PathVariable String username, @PathVariable long userId) {
+        return new ResponseEntity<>(authBusinessService.logout(username, userId), HttpStatus.OK);
+    }
 }

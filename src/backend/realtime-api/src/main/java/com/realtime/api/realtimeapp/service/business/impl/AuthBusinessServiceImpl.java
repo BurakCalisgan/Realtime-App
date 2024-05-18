@@ -18,6 +18,8 @@ import com.realtime.api.realtimeapp.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -138,5 +140,15 @@ public class AuthBusinessServiceImpl implements AuthBusinessService {
                 .token(jwt)
                 .roles(roles)
                 .build();
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "user", key = "#userId"),
+            @CacheEvict(cacheNames = "user-details", key = "#username")
+    })
+    public MessageResponse logout(String username, long userId) {
+        log.info("Logout request: {} - {}", username, userId);
+        return new MessageResponse("User logout successfully");
     }
 }

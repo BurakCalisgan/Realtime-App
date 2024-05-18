@@ -37,11 +37,11 @@ services:
     depends_on:
       - zookeeper
 
-    # cache:
-    #   image: "redis"
-    #   container_name: redis
-    #   ports:
-    #     - "6379:6379"
-    #   environment:
-    #     - ALLOW_EMPTY_PASSWORD=yes
-    #     - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    redis:
+      image: "redis"
+      container_name: redis
+      ports:
+        - "6379:6379"
+      environment:
+        - ALLOW_EMPTY_PASSWORD=yes
+        - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL

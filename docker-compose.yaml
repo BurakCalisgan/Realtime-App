@@ -8,8 +8,8 @@ services:
   kafka:
     image: confluentinc/cp-kafka
 
-  # cache:
-  #   image: "redis"
+  redis:
+    image: "redis"
 
   realtime.socket:
     image: realtime_socket_image
