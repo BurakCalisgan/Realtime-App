@@ -51,7 +51,7 @@ docker compose up -d
 #### Adım 3: Çalışan uygulamaları kontrol edin
 ```
 Backend Api    : http://localhost:8383/swagger-ui/index.html
-Backend Socker : http://localhost:3000
+Backend Socket : http://localhost:3000
 Frontend       : http://localhost:4200
 ```
 
@@ -74,6 +74,6 @@ docker-compose -f docker-compose-local.yaml up -d
 #### Adım 3: Çalışan uygulamaları kontrol edin
 ```
 Backend Api    : http://localhost:8383/swagger-ui/index.html
-Backend Socker : http://localhost:3000
+Backend Socket : http://localhost:3000
 Frontend       : http://localhost:4200
 ```
